@@ -13,7 +13,7 @@ public class Utils {
         return Integer.compare(a, b);
     }
 
-    // Добавляем insertionSort с метриками
+    
     public static void insertionSort(int[] a, int left, int right, Metrics metrics) {
         for (int i = left + 1; i <= right; i++) {
             int key = a[i];
