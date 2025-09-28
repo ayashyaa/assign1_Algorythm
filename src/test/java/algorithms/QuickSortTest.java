@@ -12,9 +12,9 @@ class QuickSortTest {
         int[] copy = array.clone();
 
         Metrics metrics = new Metrics();
-        QuickSort.sort(array, metrics); // 🔹 исправлено: используем QuickSort
+        QuickSort.sort(array, metrics); 
 
-        java.util.Arrays.sort(copy); // эталонная сортировка
+        java.util.Arrays.sort(copy); 
         assertArrayEquals(copy, array);
 
         System.out.println("Random array - Comparisons: " + metrics.getComparisons());
