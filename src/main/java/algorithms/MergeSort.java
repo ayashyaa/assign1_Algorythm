@@ -2,8 +2,8 @@ package algorithms;
 
 public class MergeSort {
 
-    public long comparisons = 0;  // счётчик сравнений
-    public int maxDepth = 0;      // максимальная глубина рекурсии
+    public long comparisons = 0;  
+    public int maxDepth = 0;      
 
     public void mergeSort(int[] array) {
         if (array.length <= 1) return;
@@ -24,7 +24,7 @@ public class MergeSort {
     private void merge(int[] array, int[] buffer, int left, int mid, int right) {
         int i = left, j = mid + 1, k = left;
         while (i <= mid && j <= right) {
-            comparisons++;  // увеличиваем счётчик при каждом сравнении
+            comparisons++;  
             if (array[i] <= array[j]) buffer[k++] = array[i++];
             else buffer[k++] = array[j++];
         }
