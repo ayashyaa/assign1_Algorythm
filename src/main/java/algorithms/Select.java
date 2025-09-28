@@ -11,11 +11,11 @@ public class Select {
         if (k < 0 || k >= array.length) {
             throw new IllegalArgumentException("k is out of bounds");
         }
-        return quickSelect(array, 0, array.length - 1, k, metrics, 1); // передаем текущую глубину рекурсии
+        return quickSelect(array, 0, array.length - 1, k, metrics, 1); 
     }
 
     private static int quickSelect(int[] array, int left, int right, int k, Metrics metrics, int depth) {
-        metrics.updateMaxDepth(depth); // передаем текущую глубину рекурсии
+        metrics.updateMaxDepth(depth); 
 
         if (left == right) return array[left];
 
