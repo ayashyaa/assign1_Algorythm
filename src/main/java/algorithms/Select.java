@@ -1,68 +1,42 @@
 package algorithms;
 
 import utils.Metrics;
-import utils.Utils;
-
-import java.util.Random;
 
 public class Select {
 
-    private static final Random random = new Random();
-
-    // Основной метод для поиска k-го элемента
-    public static int select(int[] a, int left, int right, int k, Metrics metrics) {
-        metrics.updateMaxDepth(1); // Начальная глубина
-
-        while (true) {
-            if (right - left + 1 <= 5) {
-                Utils.insertionSort(a, left, right, metrics);
-                return a[left + k];
-            }
-
-            // Разбиваем на группы по 5 и находим медианы
-            int numMedians = 0;
-            for (int i = left; i <= right; i += 5) {
-                int subRight = Math.min(i + 4, right);
-                Utils.insertionSort(a, i, subRight, metrics);
-                int medianIndex = i + (subRight - i) / 2;
-                Utils.swap(a, left + numMedians, medianIndex);
-                numMedians++;
-            }
-
-            // Рекурсивно выбираем медиану медиан
-            int pivot = select(a, left, left + numMedians - 1, numMedians / 2, metrics);
-
-            // Находим индекс pivot
-            int pivotIndex = partition(a, left, right, pivot, metrics);
-            int length = pivotIndex - left;
-
-            if (k == length) return a[pivotIndex];
-            else if (k < length) right = pivotIndex - 1;
-            else {
-                k = k - length - 1;
-                left = pivotIndex + 1;
-            }
+    public static int select(int[] array, int k, Metrics metrics) {
+        if (array == null || array.length == 0) {
+            throw new IllegalArgumentException("Array is empty");
         }
+        if (k < 0 || k >= array.length) {
+            throw new IllegalArgumentException("k is out of bounds");
+        }
+        return quickSelect(array, 0, array.length - 1, k, metrics, 1); // передаем текущую глубину рекурсии
     }
 
-    // Классическая partition
-    private static int partition(int[] a, int left, int right, int pivot, Metrics metrics) {
-        int pivotIndex = left;
-        for (int i = left; i <= right; i++) {
-            if (Utils.compare(a[i], pivot, metrics) == 0) {
-                pivotIndex = i;
-                break;
+    private static int quickSelect(int[] array, int left, int right, int k, Metrics metrics, int depth) {
+        metrics.updateMaxDepth(depth); // передаем текущую глубину рекурсии
+
+        if (left == right) return array[left];
+
+        int pivotIndex = partition(array, left, right, metrics);
+
+        if (k == pivotIndex) return array[k];
+        else if (k < pivotIndex) return quickSelect(array, left, pivotIndex - 1, k, metrics, depth + 1);
+        else return quickSelect(array, pivotIndex + 1, right, k, metrics, depth + 1);
+    }
+
+    private static int partition(int[] array, int left, int right, Metrics metrics) {
+        int pivot = array[right];
+        int i = left;
+        for (int j = left; j < right; j++) {
+            metrics.incrementComparisons();
+            if (array[j] <= pivot) {
+                utils.Utils.swap(array, i, j);
+                i++;
             }
         }
-        Utils.swap(a, pivotIndex, right);
-        int storeIndex = left;
-        for (int i = left; i < right; i++) {
-            if (Utils.compare(a[i], pivot, metrics) < 0) {
-                Utils.swap(a, storeIndex, i);
-                storeIndex++;
-            }
-        }
-        Utils.swap(a, storeIndex, right);
-        return storeIndex;
+        utils.Utils.swap(array, i, right);
+        return i;
     }
 }
