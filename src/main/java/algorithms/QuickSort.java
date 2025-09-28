@@ -14,7 +14,7 @@ public class QuickSort {
 
         metrics.updateMaxDepth(depth);
 
-        // Используем insertion sort для маленьких массивов
+       
         if (right - left <= 10) {
             Utils.insertionSort(array, left, right, metrics);
             return;
