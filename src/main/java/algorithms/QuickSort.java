@@ -5,43 +5,38 @@ import utils.Utils;
 
 public class QuickSort {
 
-    // Сортировка массива с использованием QuickSort
     public static void sort(int[] array, Metrics metrics) {
-        quickSort(array, 0, array.length - 1, 0, metrics);
+        quickSort(array, 0, array.length - 1, metrics, 0);
     }
 
-    private static void quickSort(int[] array, int left, int right, int depth, Metrics metrics) {
+    private static void quickSort(int[] array, int left, int right, Metrics metrics, int depth) {
         if (left >= right) return;
 
         metrics.updateMaxDepth(depth);
 
-        // Выбираем случайный pivot
-        int pivotIndex = left + Utils.random.nextInt(right - left + 1);
-        int pivot = array[pivotIndex];
-        Utils.swap(array, pivotIndex, right); // перемещаем pivot в конец
+        // Используем insertion sort для маленьких массивов
+        if (right - left <= 10) {
+            Utils.insertionSort(array, left, right, metrics);
+            return;
+        }
 
-        int i = left;
-        int j = right - 1;
+        int pivotIndex = partition(array, left, right, metrics);
+        quickSort(array, left, pivotIndex - 1, metrics, depth + 1);
+        quickSort(array, pivotIndex + 1, right, metrics, depth + 1);
+    }
 
-        while (i <= j) {
-            while (i <= j && Utils.compare(array[i], pivot, metrics) < 0) i++;
-            while (i <= j && Utils.compare(array[j], pivot, metrics) > 0) j--;
-            if (i <= j) {
-                Utils.swap(array, i, j);
+    private static int partition(int[] array, int left, int right, Metrics metrics) {
+        int pivot = array[right];
+        int i = left - 1;
+
+        for (int j = left; j < right; j++) {
+            metrics.incrementComparisons();
+            if (array[j] <= pivot) {
                 i++;
-                j--;
+                Utils.swap(array, i, j);
             }
         }
-
-        Utils.swap(array, i, right); // ставим pivot на место
-
-        // Рекурсия: сначала на меньшую часть
-        if (i - left < right - i) {
-            quickSort(array, left, i - 1, depth + 1, metrics);
-            quickSort(array, i + 1, right, depth + 1, metrics);
-        } else {
-            quickSort(array, i + 1, right, depth + 1, metrics);
-            quickSort(array, left, i - 1, depth + 1, metrics);
-        }
+        Utils.swap(array, i + 1, right);
+        return i + 1;
     }
 }
