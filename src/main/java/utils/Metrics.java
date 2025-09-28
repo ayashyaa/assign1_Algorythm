@@ -12,14 +12,14 @@ public class Metrics {
         return comparisons;
     }
 
-    // Обновление максимальной глубины рекурсии
+    
     public void updateMaxDepth(int depth) {
         if (depth > maxDepth) {
             maxDepth = depth;
         }
     }
 
-    // Метод для получения максимальной глубины
+  
     public int getMaxDepth() {
         return maxDepth;
     }
