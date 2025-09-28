@@ -9,7 +9,7 @@ class SelectTest {
     @Test
     void testSelectRandomArray() {
         int[] array = {5, 2, 9, 1, 5, 0};
-        int k = 2; // 3-й минимальный элемент
+        int k = 2; 
         Metrics metrics = new Metrics();
 
         int result = Select.select(array, k, metrics);
